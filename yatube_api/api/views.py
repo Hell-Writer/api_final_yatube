@@ -3,8 +3,7 @@ from django_filters.rest_framework import DjangoFilterBackend
 from posts.models import Follow, Group, Post
 from rest_framework import filters, mixins, viewsets
 from rest_framework.pagination import LimitOffsetPagination
-from rest_framework.permissions import (AllowAny, IsAuthenticated,
-                                        IsAuthenticatedOrReadOnly)
+from rest_framework.permissions import (AllowAny, IsAuthenticated)
 
 from .permissions import IsAuthorOrReadOnly
 from .serializers import (CommentSerializer, FollowSerializer, GroupSerializer,
@@ -35,11 +34,6 @@ class CommentViewSet(viewsets.ModelViewSet):
     def perform_create(self, serializer):
         post = get_object_or_404(Post, pk=self.kwargs.get('post_id'))
         serializer.save(author=self.request.user, post=post)
-
-    def get_permissions(self):
-        if self.action == 'retrieve':
-            return (IsAuthenticatedOrReadOnly(),)
-        return super().get_permissions()
 
 
 class FollowViewSet(mixins.RetrieveModelMixin,

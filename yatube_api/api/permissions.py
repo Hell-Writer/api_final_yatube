@@ -14,12 +14,3 @@ class IsAuthorOrReadOnly(permissions.BasePermission):
             request.method in permissions.SAFE_METHODS
             or obj.author == request.user
         )
-
-
-class IsAdminOrReadOnly(permissions.BasePermission):
-    '''Класс, разрешающий изменять БД только персоналу'''
-    def has_permission(self, request, view):
-        if request.method in permissions.SAFE_METHODS:
-            return True
-        else:
-            return request.user.is_staff
